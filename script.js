@@ -21,8 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Initial Setup ---
     if (customCursor) { customCursor.textContent = '𖹭'; }
-    // Use Fake localStorage Counter
-    if (visitCountSpan) { let count = localStorage.getItem('pageVisits_worrySite') || 0; visitCountSpan.textContent = ++count; localStorage.setItem('pageVisits_worrySite', count); }
+  
     // Title Animation
     const titles = ['m', 'me', 'mew', 'mewo', 'meow', 'meow .', 'meow ..', 'meow ...', 'meow ..', 'meow .']; let titleIndex = 0; setInterval(() => { document.title = titles[titleIndex]; titleIndex = (titleIndex + 1) % titles.length; }, 600);
 
