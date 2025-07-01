@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>meow ...</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div id="entry-screen">
+        <p>Click to Enter</p>
+    </div>
+
+    <div id="main-content">
+        <div class="faith-title">
+            <pre>
+WW      WW  OOOO  RRRR   RRRR   YY  YY
+WW      WW OO  OO RR  RR RR  RR  YY  YY
+WW   W  WW OO  OO RRRR   RRRR    YYYY
+ WW WWW WW OO  OO RR RR  RR RR     YY
+  WW   WW   OOOO  RR  RR RR  RR    YY  
+            </pre>
+        </div>
+
+        <div class="icon-links">
+            <a href="#" class="icon-link popup-trigger" data-popup-target="music-popup"><i class="fa-solid fa-music"></i></a>
+            <a href="#" class="icon-link popup-trigger" data-popup-target="social-popup"><i class="fa-solid fa-share-nodes"></i></a>
+            <a href="https://x.com/i/user/1379825324640174262" class="icon-link"><i class="fa-brands fa-x-twitter"></i></a>
+        </div>
+
+        <div id="music-popup" class="popup-menu">
+            <div class="popup-row">
+                <a href="https://soundcloud.com/worry-rip" class="popup-link">
+                    <i class="popup-icon fa-brands fa-soundcloud"></i>
+                    <span class="popup-text multicolor-neon">worry.rip</span>
+                </a>
+            </div>
+        </div>
+
+        <div id="social-popup" class="popup-menu">
+            <div class="popup-row">
+                <a href="https://www.tiktok.com/@fb" class="popup-link">
+                    <i class="popup-icon fa-brands fa-tiktok"></i>
+                    <span class="popup-text multicolor-neon">fb</span>
+                </a>
+            </div>
+            <div class="popup-row">
+                <a href="https://discord.gg/pawdup" class="popup-link">
+                    <i class="popup-icon fa-brands fa-discord"></i>
+                    <span class="popup-text multicolor-neon">pawdup</span>
+                </a>
+            </div>
+            <div class="popup-row">
+                <a href="https://www.tiktok.com/@inproving" class="popup-link">
+                    <i class="popup-icon fa-brands fa-tiktok"></i>
+                    <span class="popup-text multicolor-neon">inproving</span>
+                </a>
+            </div>
+            <div class="popup-row">
+                <a href="https://www.tiktok.com/@ugive" class="popup-link">
+                    <i class="popup-icon fa-brands fa-tiktok"></i>
+                    <span class="popup-text multicolor-neon">ugive</span>
+                </a>
+            </div>
+        </div>
+
+        <div id="volume-control-container">
+            <button id="mute-button"><i id="volume-icon" class="fa-solid fa-volume-high"></i></button>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
+        </div>
+
+        <div id="view-counter-area">
+            <span id="visit-count">0</span>
+        </div>
+
+        <audio id="background-music" loop>
+            <source src="path/to/your/audio.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <div id="custom-cursor"></div>
+    <script src="script.js"></script>
+</body>
+</html>
