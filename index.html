@@ -4,31 +4,138 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discord Webhook Messenger</title>
-    <style>
-        body {
-            background-color: #1f2937;
-            color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            transition: all 0.3s ease;
+    <link rel="stylesheet" href="style.css">
+</head>
+<body id="body">
+    <div class="container" id="card">
+        <button onclick="toggleTheme()" class="theme-toggle" id="themeButton" title="Toggle Theme">
+            <svg id="themeIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+        </button>
+        <h1>faith&lt;3</h1>
+        <div class="button-group">
+            <button onclick="deleteWebhook()" class="delete">Delete Webhook</button>
+        </div>
+        <div>
+            <label for="webhookUrl">Discord Webhook URL</label>
+            <input type="text" id="webhookUrl" placeholder="Enter your Discord webhook URL">
+        </div>
+        <div>
+            <label for="message">Message</label>
+            <textarea id="message" placeholder="Enter your message"></textarea>
+        </div>
+        <div>
+            <label for="sendCount">Send Count</label>
+            <input type="number" id="sendCount" min="1" value="1" placeholder="Count">
+        </div>
+        <button onclick="sendMessage()" class="send">Send Message</button>
+        <p id="status"></p>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.getElementById('body');
+            const card = document.getElementById('card');
+            const themeIcon = document.getElementById('themeIcon');
+            const isDark = !body.classList.contains('light');
+
+            if (isDark) {
+                body.classList.add('light');
+                card.classList.add('light');
+                themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
+            } else {
+                body.classList.remove('light');
+                card.classList.remove('light');
+                themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+            }
         }
-        body.light {
-            background-color: #f3f4f6;
-            color: #000000;
+
+        async function sendMessage() {
+            const webhookUrl = document.getElementById('webhookUrl').value.trim();
+            const message = document.getElementById('message').value.trim();
+            const sendCount = parseInt(document.getElementById('sendCount').value) || 1;
+            const status = document.getElementById('status');
+
+            if (!webhookUrl || !message) {
+                status.textContent = 'Please enter both a webhook URL and a message.';
+                status.classList.add('error');
+                status.classList.remove('success');
+                return;
+            }
+
+            status.textContent = 'Sending...';
+            status.classList.remove('error', 'success');
+
+            const sendSingleMessage = async () => {
+                try {
+                    const response = await fetch(webhookUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            content: message,
+                        }),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to send message. Check your webhook URL.');
+                    }
+                    return true;
+                } catch (error) {
+                    status.textContent = 'Error: ' + error.message;
+                    status.classList.add('error');
+                    status.classList.remove('success');
+                    return false;
+                }
+            };
+
+            let successCount = 0;
+            for (let i = 0; i < sendCount; i++) {
+                if (await sendSingleMessage()) {
+                    successCount++;
+                }
+                await new Promise(resolve => setTimeout(resolve, 500)); // Delay to avoid rate limits
+            }
+            status.textContent = `Sent ${successCount} of ${sendCount} messages successfully!`;
+            status.classList.add('success');
+            status.classList.remove('error');
+            if (successCount === sendCount) {
+                document.getElementById('message').value = ''; // Clear message only if all sends succeed
+            }
         }
-        .container {
-            background-color: #374151;
-            padding: 2rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            position: relative;
-            transition: all 0.3s ease;
+
+        async function deleteWebhook() {
+            const webhookUrl = document.getElementById('webhookUrl').value.trim();
+            const status = document.getElementById('status');
+
+            if (!webhookUrl) {
+                status.textContent = 'Please enter a webhook URL to delete.';
+                status.classList.add('error');
+                status.classList.remove('success');
+                return;
+            }
+
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'DELETE',
+                });
+
+                if (response.ok) {
+                    status.textContent = 'Webhook deleted successfully!';
+                    status.classList.add('success');
+                    status.classList.remove('error');
+                    document.getElementById('webhookUrl').value = ''; // Clear webhook URL
+                } else {
+                    throw new Error('Failed to delete webhook. Check your webhook URL or permissions.');
+                }
+            } catch (error) {
+                status.textContent = 'Error: ' + error.message;
+                status.classList.add('error');
+                status.classList.remove('success');
+            }
         }
-        .container.light {
-            background-color: #
+    </script>
+</body>
+</html>
